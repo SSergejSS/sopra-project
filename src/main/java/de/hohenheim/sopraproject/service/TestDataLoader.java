@@ -1,10 +1,6 @@
 package de.hohenheim.sopraproject.service;
 
-import com.sun.xml.fastinfoset.tools.XML_SAX_StAX_FI;
-import de.hohenheim.sopraproject.entity.Contact;
-import de.hohenheim.sopraproject.entity.Institute;
-import de.hohenheim.sopraproject.entity.Role;
-import de.hohenheim.sopraproject.entity.User;
+import de.hohenheim.sopraproject.entity.*;
 import de.hohenheim.sopraproject.service.RoleService;
 import de.hohenheim.sopraproject.service.UserService;
 import org.slf4j.Logger;
@@ -15,9 +11,8 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class TestDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -34,22 +29,23 @@ public class TestDataLoader implements ApplicationListener<ContextRefreshedEvent
     private UserService userService;
 
     @Autowired
+    private EventService eventService;
+
+    @Autowired
     private ContactService contactService;
 
     @Autowired
     private InstituteService instituteService;
 
     /**
-     * This method is used to define test Arguments for the database. The method will be execute when the Spring context
-     * is initialized that means it will be executed whenever the server is (re-)started. There are several Sets in this
-     * methods, which represents all the person which leads to the respective institute. Some of them will be empty
-     * because there there are no contact objects which are part of these institutes. nevertheless the sets are
-     * initialized for completeness and for easier adding of the contact objects
+     * Diese Methode wird zum Aufsetzen von Testdaten für die Datenbank verwendet werden. Die Methode wird immer dann
+     * ausgeführt, wenn der Spring Kontext initialisiert wurde, d.h. wenn Sie Ihren Server (neu-)starten.
      */
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent event){
+    public void onApplicationEvent(ContextRefreshedEvent event) {
         logger.info("Initialisiere Datenbank mit Testdaten...");
 
+        // Initialisieren Sie Beispielobjekte und speichern Sie diese über Ihre Services
         Role userRole = new Role("ROLE_USER");
         Role adminRole = new Role("ROLE_ADMIN");
         roleService.saveRole(userRole);
@@ -61,41 +57,33 @@ public class TestDataLoader implements ApplicationListener<ContextRefreshedEvent
         Set<Role> adminRoles = new HashSet<>();
         adminRoles.add(adminRole);
 
-        User normalUser1 = new User();
-        normalUser1.setUsername("user1");
-        normalUser1.setPassword(passwordEncoder.encode("1234"));
-        normalUser1.setRoles(userRoles);
-        userService.saveUser(normalUser1);
-
-        User normalUser2 = new User();
-        normalUser2.setUsername("user2");
-        normalUser2.setPassword(passwordEncoder.encode("1234"));
-        normalUser2.setRoles(userRoles);
-        userService.saveUser(normalUser2);
-
-        User normalUser3 = new User();
-        normalUser3.setUsername("user3");
-        normalUser3.setPassword(passwordEncoder.encode("1234"));
-        normalUser3.setRoles(userRoles);
-        userService.saveUser(normalUser3);
-
-        User normalUser4 = new User();
-        normalUser4.setUsername("user4");
-        normalUser4.setPassword(passwordEncoder.encode("1234"));
-        normalUser4.setRoles(userRoles);
-        userService.saveUser(normalUser4);
-
-        User normalUser5 = new User();
-        normalUser5.setUsername("user5");
-        normalUser5.setPassword(passwordEncoder.encode("1234"));
-        normalUser5.setRoles(userRoles);
-        userService.saveUser(normalUser5);
+        User normalUser = new User();
+        normalUser.setUsername("user");
+        normalUser.setPassword(passwordEncoder.encode("1234"));
+        normalUser.setRoles(userRoles);
+        userService.saveUser(normalUser);
 
         User admin = new User();
         admin.setUsername("admin");
         admin.setPassword(passwordEncoder.encode("admin"));
         admin.setRoles(adminRoles);
         userService.saveUser(admin);
+
+        Event stammtisch = new Event();
+        stammtisch.setDate("21.07.2020");
+        stammtisch.setEventName("Informatiker-Stammtisch");
+        stammtisch.setPlace("Cafeteria");
+        stammtisch.setTime("19:00:00");
+        stammtisch.setText("Ehemalige Absolventen");
+        eventService.saveEvent(stammtisch);
+
+        Event jahresfeier = new Event();
+        jahresfeier.setText("Jubiläum");
+        jahresfeier.setTime("15:30:00");
+        jahresfeier.setPlace("Audimax");
+        jahresfeier.setEventName("Jahresfeier");
+        jahresfeier.setDate("15.08.2020");
+        eventService.saveEvent(jahresfeier);
 
         //Example contacts
         Contact max = new Contact();
@@ -362,5 +350,8 @@ public class TestDataLoader implements ApplicationListener<ContextRefreshedEvent
         bwi.setName("Betriebswirtschaftliches Institut (BWI)");
         bwi.setContacts(bwiConacts);
         instituteService.saveInstitute(bwi);
+
+
+
     }
 }
