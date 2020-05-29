@@ -29,6 +29,12 @@ public class Contact {
 
     private Date dayOfBirth;
 
+    @OneToMany(mappedBy = "contact")
+    private List<Contacthistory> contacthistory = new ArrayList<Contacthistory>();
+
+    @ManyToOne
+    private Institute ownInstitute;
+
     public Contact(Integer contactID, String firstname, String lastname/*, Integer age*/, String occupation, String email,
                    String courseOfStudies, String freeText, Date dayOfBirth) {
         this.contactID = contactID;
@@ -104,6 +110,14 @@ public class Contact {
     }
  */
 
+public Institute getOwnInstitute() {
+    return ownInstitute;
+}
+
+    public void setOwnInstitute(Institute ownInstitute) {
+        this.ownInstitute = ownInstitute;
+    }
+
     public String getOccupation() {
         return occupation;
     }
@@ -142,5 +156,13 @@ public class Contact {
 
     public void setDayOfBirth(Date dayOfBirth) {
         this.dayOfBirth = dayOfBirth;
+    }
+
+    public List<Contacthistory> getContacthistory() {
+        return contacthistory;
+    }
+
+    public void setContacthistory(List<Contacthistory> contacthistory) {
+        this.contacthistory = contacthistory;
     }
 }

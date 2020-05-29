@@ -1,8 +1,8 @@
 package de.hohenheim.sopraproject.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Contacthistory {
@@ -14,6 +14,13 @@ public class Contacthistory {
     private String date;
 
     private String text;
+
+    @ManyToOne
+    private Contact contact;
+
+    public Contacthistory() {
+        //empty constructor for Hibernate
+    }
 
     public Integer getKontakthistoryId() {
         return contacthistoryId;
@@ -39,7 +46,19 @@ public class Contacthistory {
         this.text = text;
     }
 
-    public Contacthistory() {
-        //empty constructor for Hibernate
+    public Integer getContacthistoryId() {
+        return contacthistoryId;
+    }
+
+    public void setContacthistoryId(Integer contacthistoryId) {
+        this.contacthistoryId = contacthistoryId;
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 }

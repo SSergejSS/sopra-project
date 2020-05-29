@@ -37,6 +37,9 @@ public class TestDataLoader implements ApplicationListener<ContextRefreshedEvent
     @Autowired
     private InstituteService instituteService;
 
+    @Autowired
+    private ContacthistoryService contacthistoryService;
+
     /**
      * Diese Methode wird zum Aufsetzen von Testdaten für die Datenbank verwendet werden. Die Methode wird immer dann
      * ausgeführt, wenn der Spring Kontext initialisiert wurde, d.h. wenn Sie Ihren Server (neu-)starten.
@@ -45,9 +48,25 @@ public class TestDataLoader implements ApplicationListener<ContextRefreshedEvent
     public void onApplicationEvent(ContextRefreshedEvent event) {
         logger.info("Initialisiere Datenbank mit Testdaten...");
 
+
+
+
+
+
+        Event stammtisch = new Event();
+        stammtisch.setDate("21.07.2020");
+        stammtisch.setEventName("Informatiker-Stammtisch");
+        stammtisch.setPlace("Cafeteria");
+        stammtisch.setTime("19:00:00");
+        stammtisch.setText("Ehemalige Absolventen");
+        eventService.saveEvent(stammtisch);
+
+
         // Initialisieren Sie Beispielobjekte und speichern Sie diese über Ihre Services
         Role userRole = new Role("ROLE_USER");
         Role adminRole = new Role("ROLE_ADMIN");
+        stammtisch.getRole().add(adminRole);
+       // eventService.saveEvent(stammtisch);
         roleService.saveRole(userRole);
         roleService.saveRole(adminRole);
 
@@ -69,13 +88,7 @@ public class TestDataLoader implements ApplicationListener<ContextRefreshedEvent
         admin.setRoles(adminRoles);
         userService.saveUser(admin);
 
-        Event stammtisch = new Event();
-        stammtisch.setDate("21.07.2020");
-        stammtisch.setEventName("Informatiker-Stammtisch");
-        stammtisch.setPlace("Cafeteria");
-        stammtisch.setTime("19:00:00");
-        stammtisch.setText("Ehemalige Absolventen");
-        eventService.saveEvent(stammtisch);
+
 
         Event jahresfeier = new Event();
         jahresfeier.setText("Jubiläum");
@@ -95,7 +108,17 @@ public class TestDataLoader implements ApplicationListener<ContextRefreshedEvent
         max.setCourseOfStudies("Wirtschaftsinformatik");
         max.setFreeText("Semestersprecher des fünften Bachelor Semesters");
         max.setFormatDateOfBirth(1996, 0, 01);
+        // max.setOwnInstitute(bwi);
         contactService.saveContact(max);
+
+        //Example Contacthistories
+        Contacthistory historyOne = new Contacthistory();
+        historyOne.setDate("12.03.2018");
+        historyOne.setContact(max);
+        historyOne.setText("Beim Kaffeetrinken kennengelernt");
+        contacthistoryService.saveContacthistory(historyOne);
+
+
 
         Contact julia = new Contact();
         julia.setFirstname("Julia");
@@ -271,6 +294,7 @@ public class TestDataLoader implements ApplicationListener<ContextRefreshedEvent
         alex.setCourseOfStudies("Philosophie");
         alex.setFreeText("");
         alex.setFormatDateOfBirth(1999, 5, 7);
+
         contactService.saveContact(alex);
 
         Contact min = new Contact();
@@ -291,7 +315,10 @@ public class TestDataLoader implements ApplicationListener<ContextRefreshedEvent
         ibk.setLocation("Campus Stadtmitte");
         ibk.setName("Institut für Baukonstruktion (IBK)");
         ibk.setContacts(ibksContacts);
+        ibk.setInstituteID(2);
         instituteService.saveInstitute(ibk);
+
+
 
         Set<Contact> philoConacts = new HashSet<>();
         philoConacts.add(jose);
@@ -303,6 +330,7 @@ public class TestDataLoader implements ApplicationListener<ContextRefreshedEvent
         philo.setLocation("Campus Stadtmitte");
         philo.setName("Institut für Philosophie (PHILO)");
         philo.setContacts(philoConacts);
+        philo.setInstituteID(3);
         instituteService.saveInstitute(philo);
 
         Set<Contact> iaasContacts = new HashSet<>();
@@ -311,6 +339,7 @@ public class TestDataLoader implements ApplicationListener<ContextRefreshedEvent
         iaas.setLocation("Campus Vaihingen");
         iaas.setName("Institut für Architektur von Anwendungssystemen (IAAS)");
         iaas.setContacts(iaasContacts);
+        iaas.setInstituteID(4);
         instituteService.saveInstitute(iaas);
 
         Set<Contact> iocContacts = new HashSet<>();
@@ -322,6 +351,7 @@ public class TestDataLoader implements ApplicationListener<ContextRefreshedEvent
         ioc.setLocation("Campus Vaihingen");
         ioc.setName("Institut für organische Chemie (IOC)");
         ioc.setContacts(iocContacts);
+        ioc.setInstituteID(5);
         instituteService.saveInstitute(ioc);
 
         Set<Contact> fmiContacts = new HashSet<>();
@@ -338,6 +368,7 @@ public class TestDataLoader implements ApplicationListener<ContextRefreshedEvent
         fmi.setLocation("Campus Vaihingen");
         fmi.setName("Institut für Formale Methoden der Informatik (FMI)");
         fmi.setContacts(fmiContacts);
+        fmi.setInstituteID(7);
         instituteService.saveInstitute(fmi);
 
         Set<Contact> bwiConacts = new HashSet<>();
@@ -349,7 +380,11 @@ public class TestDataLoader implements ApplicationListener<ContextRefreshedEvent
         bwi.setLocation("Campus Stadtmitte");
         bwi.setName("Betriebswirtschaftliches Institut (BWI)");
         bwi.setContacts(bwiConacts);
+        bwi.setInstituteID(19);
         instituteService.saveInstitute(bwi);
+
+
+
 
 
 

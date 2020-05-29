@@ -4,6 +4,9 @@ package de.hohenheim.sopraproject.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Event {
@@ -21,6 +24,9 @@ public class Event {
     private String time;
 
     private String text;
+
+    @ManyToMany
+    private List<Role> role = new ArrayList<Role>();
 
     public Event() {
         //empty constructor for Hibernate
@@ -72,5 +78,21 @@ public class Event {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Integer getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(Integer eventId) {
+        this.eventId = eventId;
+    }
+
+    public List<Role> getRole() {
+        return role;
+    }
+
+    public void setRole(List<Role> role) {
+        this.role = role;
     }
 }
